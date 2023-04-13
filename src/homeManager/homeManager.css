@@ -1,0 +1,235 @@
+.menuBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1em;
+}
+
+.menuSearch {
+    flex: 8;
+    display: flex;
+    justify-content: center;
+}
+
+.menuBarInput{
+    width: 70%;
+    font-size: 1.15em;
+}
+
+.searchIcon {
+    position:relative;
+    right: 2em;
+    top: 0.2em;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.menuProfile {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.circle{
+    background-color: black;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+}
+
+.mainContainer {
+    margin: 1em;
+    display: grid;
+    column-gap: 1.5em;
+    grid-template-columns: 2fr 8fr;
+    height: 85vh;
+}
+
+.newBtn {
+    background-color: #0D3B66;
+}
+
+.sourceButton {
+    background-color: #B5B5B5;
+    width: 100%;
+    margin-bottom: 0.25em;
+    text-align: left;
+}
+
+.homeContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.logOutBtn {
+    position: fixed;
+    right: 3em;
+}
+
+.deviceContainer {
+    border-radius: 1em;
+    border: 0.15em black solid;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    overflow-y: scroll;
+    gap: 1em;
+    padding: 1em;
+}
+
+.deviceContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.device {
+    background-color: #D9D9D9;
+    border-radius: 1em;
+    padding: 0.5em;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.deviceTextArea {
+    flex: 2;
+}
+
+.deviceStateArea {
+    flex:6;
+    display: flex;
+    align-content: center;
+    justify-content:center ;
+}
+
+.currentState {
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.currentState h3 {
+    font-size: 1.25em;
+}
+
+.homeSection {
+    background-color: #D9D9D9;
+    margin-top: 0.75em;
+    margin-bottom: 0px;
+    border-radius: 1em;
+    border: 0.15em black solid;
+    height: 100%;
+    padding: 1em;
+}
+
+.profileButton {
+    background-color: white;
+    padding: 0;
+}
+
+.lockButton {
+    width: 100%;
+}
+
+.locationText {
+    text-align: center;
+    margin-left: 0.25em;
+    position: relative;
+    bottom: 2px;
+}
+
+.addDeviceContainer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    border: 4px black solid;
+    width: 40em;
+    height: 15em;
+    background-color: white;
+    z-index: 1;
+    border-radius: 10px;
+    padding: 0.75em;
+}
+
+.deviceToAdd {
+    display: flex;
+    border: 2px black solid;
+    justify-content: space-around;
+    border-radius: 10px;
+    margin-top: 0.5em;
+}
+
+.deviceType {
+    flex: 1;
+    justify-self: center;
+    border-radius: 7px;
+}
+
+.deviceTypeBtn {
+    color: black;
+    font-size: 1em;
+    background-color: rgba(255, 255, 255, 0);
+    padding: 0px;
+    width: 100%;
+}
+
+.deviceType:hover {
+    background-color: #909095;
+}
+
+.deviceType p {
+    text-align: center;
+}
+
+.deviceConfiguration {
+    display: flex;
+    margin-top: 0.5em;
+}
+
+.deviceInputContainer {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    
+}
+
+.deviceInputContainer label {
+    align-self: flex-start;
+    margin-left: 0.3em;
+    font-weight: bold;
+}
+
+.deviceInput {
+    min-width: 10em;
+    width: 98%;
+}
+
+.deviceLabel {
+    font-size: 1em;
+}
+
+.deviceButtonContainer button {
+    font-size: 1.25em;
+    width: 5em;
+}
+
+.deviceSave {
+    background-color: #0d3b66;
+    margin-right: 0.75em;
+    color: white;
+}
+
+.deviceSave:hover {
+    color: white;
+}
+
+.deviceCancel {
+    background-color: #d9d9d9;
+    color: black;
+}
+
+.deviceButtonContainer {
+    position: absolute;
+    right: 1em;
+    bottom: 1em;
+}
