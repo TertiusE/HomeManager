@@ -33,6 +33,7 @@ export const RegisterPage = () => {
                 .then((response) => {
                     navigate('/home', {state:{uid:response.user.uid}})
                     sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
+                    sessionStorage.setItem('User ID', response.user.uid)
                     const db = getDatabase();
                     set(ref(db, 'users/' + response.user.uid), {
                         devices: ""

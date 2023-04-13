@@ -36,6 +36,8 @@ export const LoginPage = () => {
                     navigate('/home', {state:{uid:response.user.uid}})
                     console.log(response.user)
                     sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
+                    sessionStorage.setItem('User ID', response.user.uid)
+
                 })
                 .catch((error) => {
                     if (error.code === 'auth/wrong-password') {

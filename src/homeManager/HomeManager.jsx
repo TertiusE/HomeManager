@@ -12,7 +12,7 @@ import { FiPower } from "react-icons/fi";
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { app } from '../config/firebase-config';
-import { getDatabase, ref, child, push, update, get,set, onValue } from "firebase/database";
+import { getDatabase, ref, child, push, update, get, set, onValue } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 
@@ -63,6 +63,11 @@ let writeToDB = (deviceType, configName, location, newState) => {
 
 const SmartLock = (props) => {
     const currentState = props.state == "true";
+    let toggleLock = () => {
+        if (currentState) {
+            writeToDB(props.type, props.configName, props.location, "false")
+        }
+    }
     return (
         <div className="device smartLock">
             <div className="deviceTextArea">
@@ -70,7 +75,7 @@ const SmartLock = (props) => {
                 <h4>{props.location}</h4>
             </div>
             <div className="deviceStateArea">
-                <button onClick={() => {writeToDB(props.type, props.configName, props.location, currentState ? "false":"true")}} className='lockButton'>{currentState ? <AiFillLock size={125} /> : <AiFillUnlock size={125} />}</button>
+                <button onClick={toggleLock} className='lockButton'>{currentState ? <AiFillLock size={125} /> : <AiFillUnlock size={125} />}</button>
             </div>
             <div className="currentState">
                 <h3>{currentState ? " Door Locked" : "Door Unlocked"}</h3>
@@ -88,7 +93,7 @@ const SmartSwitch = (props) => {
                 <h4>{props.location}</h4>
             </div>
             <div className="deviceStateArea">
-                <button onClick={() => {writeToDB(props.type, props.configName, props.location, currentState ? "false":"true")}} className='lockButton'>{currentState ? <FiPower size={125} /> : <FiPower size={125} />}</button>
+                <button onClick={() => { writeToDB(props.type, props.configName, props.location, currentState ? "false" : "true") }} className='lockButton'>{currentState ? <FiPower size={125} /> : <FiPower size={125} />}</button>
             </div>
             <div className="currentState">
                 <h3>{currentState ? " Light On" : "Light Off"}</h3>
@@ -199,12 +204,35 @@ let Devices = (props) => {
 }
 
 export const HomeManager = () => {
-    const {state} = useLocation();
+    const { state } = useLocation();
     const [deviceWindow, setWindow] = useState(false);
-    let user = state.uid;
+    let user = null;
+    let authToken = sessionStorage.getItem('Auth Token')
+    let userId = sessionStorage.getItem('User ID')
+    const navigate = useNavigate();
+
+    if (userId) {
+        user = userId;
+    }else if (state != null){
+        user = state.uid;
+    } else {
+        sessionStorage.removeItem('Auth Token');
+        navigate('/login')
+    }
+
+    
     let disableWindow = () => {
         setWindow(false);
     }
+
+    useEffect(() => {
+        let authToken = sessionStorage.getItem('Auth Token')
+        if (authToken) {
+            navigate('/home')
+        }else {
+            navigate('/login')
+        }
+    }, [])
 
     return (
         <div className="rootContainer">
@@ -218,7 +246,7 @@ export const HomeManager = () => {
                         <DeviceLocation name="Shared With Me" icon={<RiShareLine />} />
                     </div>
                 </div>
-                <Devices uid={user}/>
+                <Devices uid={user} />
             </div>
         </div>
 
