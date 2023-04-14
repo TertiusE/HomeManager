@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getDatabase, ref, set } from "firebase/database";
+import HomeManagerLogo from '../assets/HomeManager.png';
+
 
 export const RegisterPage = () => {
     let [fName, setFName] = useState("");
@@ -31,7 +33,7 @@ export const RegisterPage = () => {
         } else {
             createUserWithEmailAndPassword(authentication, email, password)
                 .then((response) => {
-                    navigate('/home', {state:{uid:response.user.uid}})
+                    navigate('/home', { state: { uid: response.user.uid } })
                     sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
                     sessionStorage.setItem('User ID', response.user.uid)
                     const db = getDatabase();
@@ -50,6 +52,9 @@ export const RegisterPage = () => {
     return (
         <div className="triangle-image center-inner">
             <div className="registerContainer">
+                <div className='formPosition'>
+                    <img src={HomeManagerLogo} alt="" srcset="" style={{ height: 50, width: 142 }} />
+                </div>
                 <form action="" method="post">
                     <ToastContainer />
                     <div className="registerTitle">

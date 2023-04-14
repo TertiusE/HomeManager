@@ -7,6 +7,7 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import HomeManagerLogo from '../assets/HomeManager.png';
 
 export const LoginPage = () => {
     let [visible, setVisibility] = useState(false);
@@ -33,7 +34,7 @@ export const LoginPage = () => {
         } else {
             signInWithEmailAndPassword(authentication, email, password)
                 .then((response) => {
-                    navigate('/home', {state:{uid:response.user.uid}})
+                    navigate('/home', { state: { uid: response.user.uid } })
                     console.log(response.user)
                     sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
                     sessionStorage.setItem('User ID', response.user.uid)
@@ -53,6 +54,9 @@ export const LoginPage = () => {
     return (
         <div className="triangle-image center-inner">
             <div className="loginContainer">
+                <div className='formPosition'>
+                    <img src={HomeManagerLogo} alt="" srcset="" style={{ height: 50, width: 142 }} />
+                </div>
                 <form action="" method="post">
                     <ToastContainer />
                     <div className="loginTitle">

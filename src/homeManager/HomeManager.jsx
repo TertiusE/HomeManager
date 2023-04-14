@@ -28,9 +28,7 @@ const MenuBar = () => {
     return (
         <div className="menuBar">
             <div >
-                <a href="/home">
-                    <img src={HomeManagerLogo} alt="" srcset="" style={{ height: 50, width: 142 }} />
-                </a>
+                <img src={HomeManagerLogo} alt="" srcset="" style={{ height: 50, width: 142 }} />
             </div>
             <div className="menuSearch">
                 <input className="menuBarInput" placeholder='Search your devices' type="text" />
@@ -62,10 +60,12 @@ let writeToDB = (deviceType, configName, location, newState) => {
 }
 
 const SmartLock = (props) => {
-    const currentState = props.state == "true";
+    const currentState = props.state == "locked";
     let toggleLock = () => {
         if (currentState) {
-            writeToDB(props.type, props.configName, props.location, "false")
+            writeToDB(props.type, props.configName, props.location, "unlocked")
+        } else {
+            writeToDB(props.type, props.configName, props.location, "locked")
         }
     }
     return (
@@ -176,32 +176,6 @@ const AddDevice = (props) => {
     );
 }
 
-let Devices = (props) => {
-    let [allDevices, setDevices] = useState([]);
-
-    useEffect(() => {
-        const db = getDatabase(app);
-        const allDataRef = ref(db, `users/${props.uid}/devices`);
-        onValue(allDataRef, (snapshot) => {
-            let allDev = [];
-            const data = snapshot.val();
-            Object.entries(data).forEach((element) => { allDev.push(element) });
-            setDevices([...allDev]);
-        });
-    }, [])
-    return (
-        <div className="deviceContainer">
-            {allDevices.map((device) => {
-                console.log(device[1].type)
-                if (device[1].type === "smartLightSwitch") {
-                    return <SmartSwitch uid={props.uid} location={device[1].location} state={device[1].state} type={device[1].type} configName={device[0]} />
-                } else if (device[1].type === "smartDoorLock") {
-                    return <SmartLock uid={props.uid} location={device[1].location} type={device[1].type} configName={device[0]} state={device[1].state} />
-                }
-            })}
-        </div>
-    )
-}
 
 export const HomeManager = () => {
     const { state } = useLocation();
@@ -210,17 +184,18 @@ export const HomeManager = () => {
     let authToken = sessionStorage.getItem('Auth Token')
     let userId = sessionStorage.getItem('User ID')
     const navigate = useNavigate();
+    let [allDevices, setDevices] = useState([]);
 
     if (userId) {
         user = userId;
-    }else if (state != null){
+    } else if (state != null) {
         user = state.uid;
     } else {
         sessionStorage.removeItem('Auth Token');
         navigate('/login')
     }
 
-    
+
     let disableWindow = () => {
         setWindow(false);
     }
@@ -228,8 +203,26 @@ export const HomeManager = () => {
     useEffect(() => {
         let authToken = sessionStorage.getItem('Auth Token')
         if (authToken) {
+            const db = getDatabase(app);
+            const allDataRef = ref(db, `users/${user}/devices`);
+            onValue(allDataRef, (snapshot) => {
+                let allDev = [];
+                const data = snapshot.val();
+                Object.entries(data).forEach((element) => { allDev.push(element) });
+                setDevices([...allDev]);
+            });
+            if (allDevices.length === 0) {
+                get(child(ref(db), `users/${user}/devices`)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        setDevices(Object.entries(snapshot.val()));
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+            }
+
             navigate('/home')
-        }else {
+        } else {
             navigate('/login')
         }
     }, [])
@@ -246,7 +239,16 @@ export const HomeManager = () => {
                         <DeviceLocation name="Shared With Me" icon={<RiShareLine />} />
                     </div>
                 </div>
-                <Devices uid={user} />
+                <div className="deviceContainer">
+                    {allDevices.map((device) => {
+                        console.log(device[1].type)
+                        if (device[1].type === "smartLightSwitch") {
+                            return <SmartSwitch uid={user} location={device[1].location} state={device[1].state} type={device[1].type} configName={device[0]} />
+                        } else if (device[1].type === "smartDoorLock") {
+                            return <SmartLock uid={user} location={device[1].location} type={device[1].type} configName={device[0]} state={device[1].state} />
+                        }
+                    })}
+                </div>
             </div>
         </div>
 
